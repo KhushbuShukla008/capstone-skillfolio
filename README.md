@@ -91,22 +91,22 @@ Developers, especially new or aspiring ones, often struggle to create a compelli
 
 ### Mockups
 - **Register Page**:
-![](register.png)
+  ![](src/assets/images/register.png)
 
 - **Login Page**:
-![](login.png)
+  ![](src/assets/images/login.png)
 
 - **Home Page**: 
-![](homepage.png)
+  ![](src/assets/images/homepage.png)
 
 - **Create Portfolio Page**:
-![](create-portfolio.png)
+  ![](src/assets/images/create-portfolio.png)
 
 - **View Portfolio**: 
-![](view-portfolio.png)
+  ![](src/assets/images/view-portfolio.png)
 
 - **Resume Page**:
-![](resume-page.png)
+  ![](src/assets/images/resume-page.png)
 
 
 ### Data
