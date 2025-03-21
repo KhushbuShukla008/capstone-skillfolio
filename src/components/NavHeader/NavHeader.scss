@@ -1,0 +1,19 @@
+.nav-header {
+    background-color: #333;
+    padding: 2rem;
+    
+    nav ul {
+    display: flex;
+    list-style: none;
+    //   flex-direction: column;
+    }
+    
+    nav ul li {
+    margin-right: 20px;
+    }
+    
+    nav ul li a {
+    color: white;
+    text-decoration: none;
+    }
+    }
