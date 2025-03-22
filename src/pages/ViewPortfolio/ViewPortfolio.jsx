@@ -1,48 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Portfolio from '../../components/Portfolio/Portfolio';
 
-const ViewPortfolio = () => {
+function ViewPortfolio() {
 const [portfolioData, setPortfolioData] = useState(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
     useEffect(() => {
     const fetchPortfolioData = async () => {
     const token = localStorage.getItem('token');
+    if (!token) {
+        setError("No token found. Please log in.");
+        setLoading(false);
+        return;
+    }
     try {
-        const response = await axios.get('/api/portfolio/1', {
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log('User from localStorage:', user);
+        const userId = user?.id;
+        if (!userId) {
+        setError("No user ID found, Please log in.");
+        setLoading(false);
+        return;
+        }
+        
+        const response = await axios.get('/portfolio/${userId}', {
         headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('Fetched Portfolio Data:', response.data);
+
+        if (Array.isArray(response.data)) {
         setPortfolioData(response.data);
+        } else {
+        setPortfolioData([]);
+        }
     } catch (error) {
         console.error(error);
+        setError("Failed to fetch portfolio data.");
+    } finally {
+        setLoading(false);
     }
     };
 
     fetchPortfolioData();
 }, []);
+if (loading) {
+    return <p>Loading...</p>;
+}
+if (error) {
+    return <p>{error}</p>;
+}
 
-return (
-    <div>
-    <h2>View Portfolio</h2>
-    {/* <img src={viewPortfolioImage} alt="View Portfolio Page" /> */}
-    {portfolioData ? (
-        <div>
-        <h3>{portfolioData.name}</h3>
-        <ul>
-            {portfolioData.projects.map((project, index) => (
-            <li key={index}>
-                <h4>{project.name}</h4>
-                <p>{project.description}</p>
-                <p>{project.techStack.join(', ')}</p>
-                <a href={project.url} target="_blank" rel="noopener noreferrer">GitHub Link</a>
-            </li>
-            ))}
-        </ul>
-        </div>
-        ) : (
-        <p>Loading...</p>
-        )}
-    </div>
+if (!portfolioData || portfolioData.length === 0) {
+    return ( 
+    <p>No portfolio data available yet. Please{' '}
+    <Link to="/createportfolio">add some projects!</Link>
+    </p> 
     );
+}
+
+return(
+    <div>
+        <Portfolio portfolioData = { portfolioData } />
+    </div>
+)
 };
 
 export default ViewPortfolio;

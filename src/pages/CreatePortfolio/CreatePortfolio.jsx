@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "./CreatePortfolio.scss";
 
 const CreatePortfolio = () => {
     const [portfolioData, setPortfolioData] = useState({

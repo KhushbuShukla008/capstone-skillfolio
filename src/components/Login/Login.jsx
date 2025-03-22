@@ -13,9 +13,12 @@ const navigate = useNavigate();
 useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
-    
-    if (accessToken) {
+    const userId = urlParams.get('user_id'); 
+
+    if (accessToken && userId) {
         localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('user', JSON.stringify({ id: userId }));
+        console.log('User ID stored:', userId); 
         navigate('/viewportfolio');
     }
 }, [navigate]);
@@ -30,8 +33,12 @@ const handleSubmit = async (e) => {
 
     if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify({ id: response.data.userId }));
+        console.log('User ID stored:', response.data.userId);
         alert('Login Successful');
         navigate('/viewportfolio');
+    } else {
+        console.log('No token found in response');
     }
     } catch (error) {
     console.error('Login error:', error);
