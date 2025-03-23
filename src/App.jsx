@@ -6,6 +6,7 @@ import Register from './pages/Register/Register';
 import CreatePortfolio from './pages/CreatePortfolio/CreatePortfolio';
 import ViewPortfolio from './pages/ViewPortfolio/ViewPortfolio';
 import Resume from './pages/Resume/Resume';
+import OAuthCallback from './pages/OAuthCallback/OAuthCallback';
 // import GitHubIntegration from './pages/GitHubIntegration';
 // import Settings from './pages/Settings';
 // import NotFound from './pages/NotFound';
@@ -28,7 +29,7 @@ function App() {
         {/* <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} /> */}
         {/* <Route path="*" element={<NotFound />} /> */}
         <Route path="/register" element={<Register />} />
-        
+        {/* <Route path="/oauth/callback" component={OAuthCallback} /> */}
         <Route path="/createportfolio" element={<CreatePortfolio />} />
         <Route path="/viewportfolio" element={<ViewPortfolio />} />
         <Route path="/resume" element={<Resume />} />

@@ -10,26 +10,20 @@ const [error, setError] = useState(null);
 
     useEffect(() => {
     const fetchPortfolioData = async () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('User from localStorage:', user);
     if (!token) {
         setError("No token found. Please log in.");
         setLoading(false);
         return;
     }
+    
     try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        console.log('User from localStorage:', user);
-        const userId = user?.id;
-        if (!userId) {
-        setError("No user ID found, Please log in.");
-        setLoading(false);
-        return;
-        }
-        
-        const response = await axios.get('/portfolio/${userId}', {
+        const response = await axios.get(`/portfolio/${user.id}`, {
         headers: { Authorization: `Bearer ${token}` },
         });
-        console.log('Fetched Portfolio Data:', response.data);
+        // console.log('Fetched Portfolio Data:', response.data);
 
         if (Array.isArray(response.data)) {
         setPortfolioData(response.data);

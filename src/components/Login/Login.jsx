@@ -13,13 +13,37 @@ const navigate = useNavigate();
 useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get('access_token');
-    const userId = urlParams.get('user_id'); 
+    const userId = urlParams.get('user_id');
+    const login = urlParams.get('login');
+    console.log('URL Params:', { accessToken, userId, login });
 
-    if (accessToken && userId) {
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('user', JSON.stringify({ id: userId }));
-        console.log('User ID stored:', userId); 
+    if (accessToken && userId ) {
+        axios.get('https://api.github.com/user', {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        }).then((userResponse) => {
+            console.log(userResponse); 
+
+        if (userResponse.data && userResponse.data.login) {
+        const githubUsername = userResponse.data.login || 'Unknown';
+        const email = userResponse.data.email || 'No Email Provided';
+        const userId = userResponse.data.id || 'Unknown';
+        localStorage.setItem('access_token', accessToken); 
+        localStorage.setItem('user', JSON.stringify({ 
+            userId: userId, 
+            githubUsername: githubUsername,
+            email: email,
+            loginMethod: 'GitHub OAuth'
+        }));
+        console.log('Stored user in localStorage:', { userId, githubUsername, email }); 
         navigate('/viewportfolio');
+    }else {
+        console.error('GitHub login missing in response');
+        alert('GitHub login missing in the response. Please try again.');
+    }
+    }).catch(error => {
+    console.error('Error fetching user data:', error);
+    alert('Failed to fetch user data from GitHub.');
+    });
     }
 }, [navigate]);
 
@@ -30,15 +54,27 @@ const handleSubmit = async (e) => {
         email,
         password
     });
+    console.log('Backend response:', response.data);
+    const { token, user } = response.data;
+    const userEmail = user.email || email || 'No Email Provided';
+    const username = user.username || 'No Username';
+    const githubUsername = user.githubUsername || 'No GitHub Username';
 
-    if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify({ id: response.data.userId }));
-        console.log('User ID stored:', response.data.userId);
+    if (token && user) {
+        localStorage.setItem('access_token', token);
+        localStorage.setItem('user', JSON.stringify({ 
+            id: user.id,
+            email: userEmail,
+            username: username,
+            githubUsername: githubUsername,
+            loginMethod: 'Email & Password'
+        }));
+        console.log('User ID stored:',  user.id, userEmail, username, githubUsername );
         alert('Login Successful');
         navigate('/viewportfolio');
     } else {
-        console.log('No token found in response');
+        console.error('Invalid response data:', response.data);
+        alert('Login failed, no token received.');
     }
     } catch (error) {
     console.error('Login error:', error);

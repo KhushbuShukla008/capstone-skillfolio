@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Register.scss';
-import GitHubAuth from '../../components/GitHubAuth/GitHubAuth';
 
 function Register() {
 const [username, setUsername] = useState('');
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
+const [githubUsername, setGithubUsername] = useState('');
 const [loading, setLoading] = useState(false);
 const navigate = useNavigate();
 
@@ -18,14 +18,15 @@ const handleSubmit = async (e) => {
     const response = await axios.post('http://localhost:8080/auth/register', {
         username,
         email,
-        password
+        password,
+        githubUsername
     });
     console.log('Registration response:', response.data);
 
     if (response.data.token) {
         alert('Registration Successful');
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify({ id: response.data.id, username: response.data.username }));
+        localStorage.setItem('user', JSON.stringify( response.data.user ));
         setLoading(false);
         navigate('/viewportfolio');
     } else {
@@ -62,8 +63,15 @@ return (
         onChange={(e) => setPassword(e.target.value)} 
         required 
     />
+    <input 
+        type="text" 
+        placeholder="GitHub Username" 
+        value={githubUsername} 
+        onChange={(e) => setGithubUsername(e.target.value)} 
+        required
+    />
     <button type="submit" disabled={loading}>{loading ? 'Registering...' : 'Register'}</button>
-    <GitHubAuth />
+    
     </form>
 );
 }
