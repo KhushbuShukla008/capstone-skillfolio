@@ -81,11 +81,6 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-        const githubAccessToken = localStorage.getItem("access_token");
-        const appAuthToken = localStorage.getItem("githubToken");
-        if (!githubAccessToken || !appAuthToken) {
-            alert("Missing authentication token. Please log in again.");
-        }
         
         const { data: portfolioResponse } = await axios.post(
             "http://localhost:8080/portfolio",
@@ -93,11 +88,10 @@ const handleSubmit = async (e) => {
                 repo: selectedRepo,
                 title:projectTitle,
                 description,
+                login: 'jmazin'
 
-            },{
-                headers: {
-                    Authorization: `Bearer ${appAuthToken}`, 
-                },});
+            }
+        );
     console.log('Portfolio created:', portfolioResponse);
     setSelectedRepo('');
     setProjectTitle('');
