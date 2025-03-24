@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./CreatePortfolioForm.scss";
 
+
 function CreatePortfolioForm() {
     const [repos, setRepos] = useState([]);
     const [selectedRepo, setSelectedRepo] = useState('');
@@ -11,20 +12,20 @@ function CreatePortfolioForm() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-
 useEffect(() => {
         const fetchRepos = async () => {
             try {
-            const token = localStorage.getItem('access_token');
+            const githubAccessToken = localStorage.getItem("access_token");;
             const user = JSON.parse(localStorage.getItem('user'));
             const login = user?.githubUsername;
-            if (!token || !login) {
-                throw new Error('No token or login found in localStorage');
+            console.log("GitHub Access Token:", githubAccessToken);
+            console.log("GitHub Username:", login);
+                
+            if (!githubAccessToken || !login) {
+                throw new Error("Missing GitHub access token or username.");
             }
-            console.log('Using token:', token);
-            console.log('Using login:', login);
             const response = await axios.get(`https://api.github.com/users/${login}/repos`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${githubAccessToken}` },
             });
             console.log('GitHub API Response:', response.data);
             setRepos(response.data);
@@ -47,7 +48,6 @@ useEffect(() => {
     const handleRepoChange = async (e) => {
         const selectedRepoName = e.target.value;
         setSelectedRepo(selectedRepoName);
-
         try {
             const token = localStorage.getItem('access_token');
             const user = JSON.parse(localStorage.getItem('user'));
@@ -60,10 +60,16 @@ useEffect(() => {
 
             if (selectedRepoDetails) {
             setProjectTitle(selectedRepoDetails.name);
-            setDescription(selectedRepoDetails.description);
-            const languagesResponse = await axios.get(`http://localhost:8080/repos/${login}/${selectedRepoName}/languages`, {
+            setDescription(selectedRepoDetails.description || "No description provided.");
+            
+            const aiResponse = await axios.post('http://localhost:8080/ai/description', {
+            repoName: selectedRepoName,});
+            setDescription(aiResponse.data.description || "No AI-generated description available.");
+                            
+            const languagesResponse = await axios.get(`https://api.github.com/repos/${login}/${selectedRepoName}/languages`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            console.log("Fetched Languages Data:", languagesResponse.data);
             setLanguage(Object.keys(languagesResponse.data).join(', '));
         }
         } catch (error) {
@@ -73,33 +79,43 @@ useEffect(() => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-        const token = localStorage.getItem('access_token');
-        const user = JSON.parse(localStorage.getItem('user'));
-        const login = user?.githubUsername;
-        if (!token || !login) {
-            alert('No token or login found in localStorage');
-            return;
+        const githubAccessToken = localStorage.getItem("access_token");
+        const appAuthToken = localStorage.getItem("githubToken");
+        if (!githubAccessToken || !appAuthToken) {
+            alert("Missing authentication token. Please log in again.");
         }
         
-        await axios.post('http://localhost:8080/portfolio', {
-            repo: selectedRepo,
-            title: projectTitle,
-            description,
-            login,
-        }, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-    alert('Portfolio created successfully!');
-    selectedRepo('');
+        const { data: portfolioResponse } = await axios.post(
+            "http://localhost:8080/portfolio",
+            {
+                repo: selectedRepo,
+                title:projectTitle,
+                description,
+
+            },{
+                headers: {
+                    Authorization: `Bearer ${appAuthToken}`, 
+                },});
+    console.log('Portfolio created:', portfolioResponse);
+    setSelectedRepo('');
     setProjectTitle('');
     setDescription('');
     setLanguage('');
+    resetForm();
     } catch (err) {
     console.error('Error creating portfolio:', err);
     alert('Failed to create portfolio, please try again.');
     }
 };
+const resetForm = () => {
+    setSelectedRepo('');
+    setProjectTitle('');
+    setDescription('');
+    setLanguage('');
+};
+
 if (loading) {
     return <p>Loading...</p>;
     }
@@ -124,6 +140,7 @@ return (
             </option>
         ))}
     </select>
+    <label htmlFor="title">Project Title:</label>
     <input 
         type="text" 
         placeholder="Project Title" 
@@ -131,12 +148,14 @@ return (
         onChange={(e) => setProjectTitle(e.target.value)} 
         required 
     />
+    <label htmlFor="description">Project Description:</label>
     <textarea 
         placeholder="Project Description" 
         value={description} 
         onChange={(e) => setDescription(e.target.value)} 
         required 
     />
+    <label htmlFor="language">Languages Used:</label>
     <input 
         type="text"
         placeholder="Languages"

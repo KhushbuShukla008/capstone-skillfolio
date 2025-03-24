@@ -1,19 +1,58 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+@use '../../styles/typography' as *;
+
 .nav-header {
-    background-color: #333;
-    padding: 2rem;
-    
-    nav ul {
     display: flex;
-    list-style: none;
-    //   flex-direction: column;
+    flex-direction: row;
+    justify-content:space-around;
+    margin-top:5rem;
+    background-color:$tertiary-color;
+    padding: 2rem 6rem;
+    justify-content: center;
+    width: 100%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #4a90e2;
+    box-shadow: 0 0 10px #4a90e2;
+    @include tablet{
+    position: fixed;
+    top: 18%;
+    left: 0;
+    padding: 2rem;
+    padding-left: 3rem;
+    width:20vw;
+    }}
+
+.nav-header nav ul {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    @include tablet{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
     }
+}
+
+.nav-header nav ul li {
     
-    nav ul li {
-    margin-right: 20px;
-    }
-    
-    nav ul li a {
-    color: white;
+    margin-bottom: 20px;
+}
+
+    .nav-header nav ul li a {
+        
     text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    transition: color 0.3s;
+
+    &:hover {
+        color: #2ecc71; 
     }
     }

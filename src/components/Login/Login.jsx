@@ -83,6 +83,7 @@ const handleSubmit = async (e) => {
 };
 
 return (
+    <div className='container'>
     <form onSubmit={handleSubmit} className="login-form">
     <input 
         type="email" 
@@ -101,6 +102,7 @@ return (
     <button type="submit">Login</button>
     <GitHubAuth />
     </form>
+    </div>
     );
 }
 

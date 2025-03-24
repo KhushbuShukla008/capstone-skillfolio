@@ -12,7 +12,7 @@ const NavHeader = () => {
         <li><Link to="/createportfolio">Create Portfolio</Link></li>
         <li><Link to="/viewportfolio">View Portfolio</Link></li>
         <li><Link to="/resume">Resume</Link></li>
-        <li><Link to="/settings">Settings</Link></li>
+        {/* <li><Link to="/settings">Settings</Link></li> */}
     </ul>
     </nav>
     </header>

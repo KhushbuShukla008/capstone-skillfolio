@@ -1,0 +1,18 @@
+
+@mixin tablet {
+    @media (min-width: 47.9375rem) {
+    @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: 80rem) {
+    @content;
+    }
+}
+
+@mixin mobile {
+    @media (min-width: 20rem) and (max-width: 47.9375rem) { 
+        @content;
+    }
+}

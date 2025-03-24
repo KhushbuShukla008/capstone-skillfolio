@@ -14,9 +14,13 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 // import Footer from './components/Shared/Footer';
 // import Settings from './pages/Settings';
 import "./App.scss";
+import "./styles/main.scss";
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 function App() {
   return (
     <Router>
+      <Header />
       <NavHeader />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -34,7 +38,7 @@ function App() {
         <Route path="/viewportfolio" element={<ViewPortfolio />} />
         <Route path="/resume" element={<Resume />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </Router>
   );
 }

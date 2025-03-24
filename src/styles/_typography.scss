@@ -1,0 +1,59 @@
+@use "./variables" as *;
+@use "./mixins" as *;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: $font-size-base;
+    color: $text-color;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: $primary-color;
+    margin-bottom: $spacing-base;
+}
+
+h1 {
+    font-size: $font-size-xlarge;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: $font-size-base;
+    font-weight: 500;
+    @include tablet{
+    font-size: $font-size-large;
+    font-weight: 700;
+    }
+}
+
+h3 {
+    font-size: $font-size-base;
+    font-weight: 500;
+}
+
+p {
+    margin-bottom: $spacing-base;
+    font-size: $font-size-base;
+}
+
+a {
+    font-family: 'Montserrat', sans-serif;
+    color: $primary-color;
+    text-decoration: none;
+    &:hover {
+    color: $secondary-color;
+    }
+}
+
+button {
+    font-family: 'Montserrat', sans-serif;
+    padding: $spacing-small $spacing-base;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background-color: $secondary-color;
+    }
+}
