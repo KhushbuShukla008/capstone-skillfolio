@@ -1,0 +1,9 @@
+@use "../../styles/mixins" as *;
+
+.view-data{
+    margin-top: 2rem;
+    margin-left: 2rem;
+    @include tablet{
+    margin-top: 8rem;
+    }
+}

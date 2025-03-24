@@ -1,5 +1,6 @@
 import React from "react";
 import CreatePortfolioForm from "../../components/CreatePortfolioForm/CreatePortfolioForm";
+import './CreatePortfolio.scss';
 
 function CreatePortfolioPage() {
     return (

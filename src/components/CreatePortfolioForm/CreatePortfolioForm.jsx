@@ -125,7 +125,8 @@ if (loading) {
     }
 
 return (
-    <form onSubmit={handleSubmit} className="create-portfolio-form">
+    <div className='create-portfolio'>
+    <form onSubmit={handleSubmit} className="create-portfolio_form">
     <label htmlFor="repo">Select Repository:</label>
     <select 
         id="repo"
@@ -164,6 +165,7 @@ return (
     />
     <button type="submit">Create Portfolio</button>
     </form>
+    </div>
 );
 }
 

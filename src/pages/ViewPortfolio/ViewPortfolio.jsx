@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Portfolio from '../../components/Portfolio/Portfolio';
-
+import './ViewPortfolio.scss';
 function ViewPortfolio() {
 const [portfolioData, setPortfolioData] = useState(null);
 const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ if (error) {
 
 if (!portfolioData || portfolioData.length === 0) {
     return ( 
-    <p>No portfolio data available yet. Please{' '}
+    <p className='view-data'>No portfolio data available yet. Please{' '}
     <Link to="/createportfolio">add some projects!</Link>
     </p> 
     );
