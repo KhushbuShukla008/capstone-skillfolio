@@ -11,10 +11,11 @@ return (
         <ul>
             {portfolioData.map((repo, index) => (
             <li key={index}>
-                <h4>{repo.name}</h4>
+                <h4>{repo.project_title}</h4>
                 <p>{repo.description || 'No description available'}</p>
-                <p>Language: {repo.language || 'Not specified'}</p>
-                <a href={repo.html_url} target="_blank" rel="noopener noreferrer">GitHub Link</a>
+                <p>Repo Name: {repo.repo_name}</p>
+                <p>Language: {repo.tech_stack || 'Not specified'}</p>
+                <a href={repo.github_url} target="_blank" rel="noopener noreferrer">GitHub Link</a>
             </li>
             ))}
         </ul>
