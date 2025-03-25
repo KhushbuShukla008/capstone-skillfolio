@@ -81,6 +81,14 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const login = user?.githubUsername;
+
+        if (!login) {
+            alert("GitHub username is missing. Please log in.");
+            setLoading(false);
+            return;
+        }
         
         const { data: portfolioResponse } = await axios.post(
             "http://localhost:8080/portfolio",
@@ -88,19 +96,22 @@ const handleSubmit = async (e) => {
                 repo: selectedRepo,
                 title:projectTitle,
                 description,
-                login: 'jmazin'
+                login,
 
             }
         );
-    console.log('Portfolio created:', portfolioResponse);
-    setSelectedRepo('');
-    setProjectTitle('');
-    setDescription('');
-    setLanguage('');
+        alert('Portfolio created successfully!');
+        console.log('Portfolio created:', portfolioResponse);
+        setSelectedRepo('');
+        setProjectTitle('');
+        setDescription('');
+        setLanguage('');
     resetForm();
     } catch (err) {
     console.error('Error creating portfolio:', err);
     alert('Failed to create portfolio, please try again.');
+    } finally {
+        setLoading(false);
     }
 };
 const resetForm = () => {

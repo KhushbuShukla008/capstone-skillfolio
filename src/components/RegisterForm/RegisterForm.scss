@@ -1,0 +1,14 @@
+.register-form{
+    top: 50%;
+    position: fixed;
+    transform: translateY(-50%);
+    justify-content: flex-end;
+    
+}
+.register-container{
+    display: flex;
+    align-self: center !important;
+    width: 100%;
+    margin: 0 !important; 
+    height: 100%;
+}

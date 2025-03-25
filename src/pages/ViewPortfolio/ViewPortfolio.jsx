@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Portfolio from '../../components/Portfolio/Portfolio';
 import './ViewPortfolio.scss';
+
 function ViewPortfolio() {
 const [portfolioData, setPortfolioData] = useState(null);
 const [loading, setLoading] = useState(true);
