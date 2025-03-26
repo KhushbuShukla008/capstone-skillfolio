@@ -25,8 +25,8 @@ const [error, setError] = useState(null);
         const response = await axios.get(`http://localhost:8080/portfolio/${user.id}`);
         console.log('Fetched Portfolio Data:', response.data);
 
-        if (response.data && !Array.isArray(response.data)) {
-            setPortfolioData([response.data]);
+        if (response.data && Array.isArray(response.data)) {
+            setPortfolioData(response.data);
         } else {
         setPortfolioData([]);
         }
