@@ -1,53 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import jsPDF from 'jspdf';
+import ResumeDisplay from '../../components/ResumeDisplay/ResumeDisplay';
+import './Resume.scss';
+const ResumePage = () => {
+    const [resumeData, setResumeData] = useState(null);
+    const [selectedTemplate, setSelectedTemplate] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log('User from localStorage:', user);
 
-const Resume = () => {
-const [resumeData, setResumeData] = useState({
-    name: '',
-    contact: '',
-    skills: '',
-    experience: '',
-});
+        if (!user || !user.id) {
+            setError("No valid user found. Please log in.");
+        }
+    }, []);
 
-const handleChange = (e) => {
-    setResumeData({ ...resumeData, [e.target.name]: e.target.value });
+    const handleTemplateSelect = async (templateType) => {
+        setIsLoading(true);
+        setSelectedTemplate(templateType);
+        setError(null);
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (!user || !user.id) {
+            setError("No valid user found. Please log in.");
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+        const projectsResponse = await axios.get(`http://localhost:8080/portfolio/${user.id}`);
+        const userProjects = projectsResponse.data;
+
+        console.log("Fetched Projects for Resume:", userProjects);
+
+        if (!userProjects || userProjects.length === 0) {
+            setError("No projects found for this user.");
+            setIsLoading(false);
+            return;
+        }
+        console.log('Sending request with:', {
+            userId: user.id,
+            templateType: templateType,
+            userProjects: userProjects
+        });
+
+        const response = await axios.post('http://localhost:8080/resume/generate', {
+                userId: user.id,
+                templateType: templateType,
+                userProjects: userProjects
+            });
+            
+            console.log('Generated Resume Data:', response.data);
+            setResumeData(response.data.resumeData);
+        } catch (error) {
+            console.error('Error generating resume:', error);
+            setError("Failed to generate resume. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <div className='portfolio-container'>
+            <h1 className='portfolio-container__title'>Generate Portfolio</h1>
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+
+            <div>
+                <button className='portfolio-container__button' onClick={() => handleTemplateSelect('github')}>GitHub Template</button>
+                <button className='portfolio-container__button' onClick={() => handleTemplateSelect('standard')}>Standard Template</button>
+            </div>
+
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : (
+                resumeData && (
+                    <div>
+                        <h2 className='portfolio-container__portfolio'>Your Portfolio</h2>
+                        <ResumeDisplay resumeData={resumeData} />
+                        {/* <button className='portfolio-container__button' onClick={handleDownloadPDF}>Download PDF</button> */}
+                    </div>
+                )
+            )}
+        </div>
+    );
 };
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    try {
-    const response = await axios.post('/api/resume', resumeData, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log(response.data);
-    generatePDF(response.data.resumeUrl);
-    } catch (error) {
-    console.error(error);
-    }
-};
-
-const generatePDF = (resumeUrl) => {
-    const doc = new jsPDF();
-    doc.text('Resume', 10, 10);
-    doc.save('resume.pdf');
-};
-
-return (
-    <div>
-    <h2>Generate Resume</h2>
-    {/* <img src={resumeImage} alt="Resume Page" /> */}
-    <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-        <input type="text" name="contact" placeholder="Contact" onChange={handleChange} required />
-        <input type="text" name="skills" placeholder="Skills" onChange={handleChange} required />
-        <input type="text" name="experience" placeholder="Experience" onChange={handleChange} required />
-        <button type="submit">Generate Resume</button>
-    </form>
-    </div>
-);
-};
-
-export default Resume;
+export default ResumePage;

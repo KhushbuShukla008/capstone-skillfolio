@@ -1,0 +1,25 @@
+@use '../../styles/mixins' as *;
+
+.portfolio-container{
+    width: 90%;
+    margin-top: 6rem;
+    margin-left: 2rem;
+    margin-bottom: 15rem;
+    @include tablet{
+    width: 48%;
+    margin-top: 8rem;
+    margin-left: auto;
+    margin-right: 2rem;
+    margin-bottom: 10rem;
+}
+&__title{
+    margin-left: 0;
+}
+&__button{
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    margin-right: 1rem;
+    margin-bottom: 2rem;
+}
+}

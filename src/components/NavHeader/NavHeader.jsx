@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './NavHeader.scss';
 
 const NavHeader = () => {
@@ -7,12 +7,12 @@ const NavHeader = () => {
     <header className="nav-header">
     <nav>
     <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/register">Register</Link></li>
-        <li><Link to="/createportfolio">Create Portfolio</Link></li>
-        <li><Link to="/viewportfolio">View Portfolio</Link></li>
-        <li><Link to="/resume">Resume</Link></li>
-        {/* <li><Link to="/settings">Settings</Link></li> */}
+        <li><NavLink to="/">Home</NavLink></li>
+        <li><NavLink to="/register">Register</NavLink></li>
+        <li><NavLink to="/createportfolio">Create Portfolio</NavLink></li>
+        <li><NavLink to="/viewportfolio">View Portfolio</NavLink></li>
+        <li><NavLink to="/resume">Generate Portfolio</NavLink></li>
+        {/* <li><NavLink to="/settings">Settings</NavLink></li> */}
     </ul>
     </nav>
     </header>
