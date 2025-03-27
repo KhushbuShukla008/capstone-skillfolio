@@ -70,7 +70,9 @@ useEffect(() => {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log("Fetched Languages Data:", languagesResponse.data);
-            setLanguage(Object.keys(languagesResponse.data).join(', '));
+            const languages = Object.keys(languagesResponse.data);
+            setLanguage(languages.join(', '));
+            console.log("Updated language state:", languages.join(', '));
         }
         } catch (error) {
             console.error('Error fetching repository details:', error);
@@ -89,6 +91,9 @@ const handleSubmit = async (e) => {
             setLoading(false);
             return;
         }
+        const languageArray = language.split(', ').map(lang => lang.trim()); 
+
+        console.log("Submitting data with languages:", languageArray);
         
         const { data: portfolioResponse } = await axios.post(
             "http://localhost:8080/portfolio",
@@ -97,15 +102,15 @@ const handleSubmit = async (e) => {
                 title:projectTitle,
                 description,
                 login,
-
+                language: languageArray,
             }
         );
         alert('Portfolio created successfully!');
         console.log('Portfolio created:', portfolioResponse);
-        setSelectedRepo('');
-        setProjectTitle('');
-        setDescription('');
-        setLanguage('');
+        // setSelectedRepo('');
+        // setProjectTitle('');
+        // setDescription('');
+        // setLanguage(Object.keys(languagesResponse.data).join(', '));
     resetForm();
     } catch (err) {
     console.error('Error creating portfolio:', err);

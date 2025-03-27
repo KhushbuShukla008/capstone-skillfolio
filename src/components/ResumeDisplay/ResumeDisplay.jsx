@@ -1,6 +1,20 @@
-import React from 'react';
+function stringifySafely(obj) {
+    const cache = new Set();
+    return JSON.stringify(obj, (key, value) => {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.has(value)) {
+                return;             }
+            cache.add(value);
+        }
+        return value;
+    });
+}
 
-const ResumeDisplay = ({ resumeData }) => {
+import React from 'react';
+import axios from 'axios';
+
+
+const ResumeDisplay = ({userId, resumeData }) => {
     const handleDownloadPDF = async () => {
         try {
             const response = await fetch('http://localhost:8080/resume/download', {
@@ -28,6 +42,34 @@ const ResumeDisplay = ({ resumeData }) => {
             console.error('Failed to download PDF', err);
         }
     };
+    const saveResume = async (userId, resumeData) => {
+        try {
+            const cleanResumeData = {
+                ...resumeData,
+                projects: resumeData.projects.map(project => ({
+                    title: project.title,
+                    description: project.description,
+                    tech_stack: project.tech_stack,
+                    github_link: project.github_link,
+                })) || [],
+            };
+            const sanitizedData = stringifySafely(cleanResumeData); 
+            const response = await axios.post('http://localhost:8080/resume/save', {
+                userId,
+                resumeData:sanitizedData,
+            });
+    
+            if (response.data.success) {
+                alert('Portfolio saved successfully!');
+                console.log('Saved Resume:', response.data.savedResume);
+            } else {
+                alert('Failed to save resume.');
+            }
+        } catch (error) {
+            console.error('Error saving resume:', error);
+            alert('An error occurred while saving the resume.');
+        }
+    };
 
     return (
         <div>
@@ -48,6 +90,7 @@ const ResumeDisplay = ({ resumeData }) => {
             ) : (
                 <p>No projects available to display.</p>
             )}
+            <button className='portfolio-container__button' onClick={() => saveResume(userId, resumeData)}>Save PDF</button>
             <button className='portfolio-container__button' onClick={handleDownloadPDF}>Download PDF</button>
         </div>
     );

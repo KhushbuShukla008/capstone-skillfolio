@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ResumeDisplay from '../../components/ResumeDisplay/ResumeDisplay';
 import './Resume.scss';
+
 const ResumePage = () => {
     const [resumeData, setResumeData] = useState(null);
     const [selectedTemplate, setSelectedTemplate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -14,6 +16,8 @@ const ResumePage = () => {
 
         if (!user || !user.id) {
             setError("No valid user found. Please log in.");
+        } else {
+            setUserId(user.id);
         }
     }, []);
 
@@ -79,7 +83,7 @@ const ResumePage = () => {
                 resumeData && (
                     <div>
                         <h2 className='portfolio-container__portfolio'>Your Portfolio</h2>
-                        <ResumeDisplay resumeData={resumeData} />
+                        {userId &&<ResumeDisplay userId={userId} resumeData={resumeData} />}
                         {/* <button className='portfolio-container__button' onClick={handleDownloadPDF}>Download PDF</button> */}
                     </div>
                 )

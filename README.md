@@ -42,7 +42,7 @@ Developers, especially new or aspiring ones, often struggle to create a compelli
 
 ### Tech Stack
 
-- **Frontend**: React.js, CSS/SCSS (for custom styling)
+- **Frontend**: React.js, HTML5, CSS/SCSS (for custom styling)
 - **Backend**: Node.js with Express.js (API for portfolio generation and GitHub integration)
 - **Database**: MySQL (for user profiles and project data storage)
 
@@ -51,6 +51,9 @@ Developers, especially new or aspiring ones, often struggle to create a compelli
 - jsPDF (for generating downloadable PDF resumes)
 - React Router (for navigation)
 - Axios (for API calls)
+- **OpenAI API** (for generating descriptions and inferring languages)
+- **JWT Authentication** (for secure user authentication and session management)
+- **Knex.js** (for SQL query building and managing database interactions)
 
 ### APIs
 
@@ -61,6 +64,14 @@ Developers, especially new or aspiring ones, often struggle to create a compelli
 - **jsPDF (Free and Open Source)**
     - To generate downloadable resumes in PDF format.
     - [jsPDF Documentation](https://github.com/parallax/jsPDF)
+
+- **OpenAI API (Free and Open Source)**
+    - To generate descriptions and infer languages.
+    - [OpenAI API Documentation](https://platform.openai.com/docs/api-reference)
+
+- **JWT Authentication**
+    - To secure user authentication and manage sessions.
+    - [JWT Documentation](https://jwt.io/introduction/)
 
 - **Optional Future APIs**:
     - LinkedIn API (To pull in user professional information, free for basic access)
